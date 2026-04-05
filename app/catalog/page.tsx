@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { fetchAllCatalogProducts } from "@/lib/supabase/catalog-products";
 
 export const dynamic = "force-dynamic";
+
+const PLACEHOLDER_IMAGE = "/og-placeholder.svg";
 
 export default async function CatalogPage() {
   const supabase = createSupabaseServerClient();
@@ -14,10 +17,7 @@ export default async function CatalogPage() {
     );
   }
 
-  const { data: rows, error } = await supabase
-    .from("products")
-    .select("id, name, sale_price, description, image_url, external_source, slug")
-    .order("created_at", { ascending: false });
+  const { data: products, error } = await fetchAllCatalogProducts(supabase);
 
   if (error) {
     return (
@@ -26,8 +26,6 @@ export default async function CatalogPage() {
       </div>
     );
   }
-
-  const products = rows ?? [];
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
@@ -48,9 +46,13 @@ export default async function CatalogPage() {
             Shop
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
-            All products from your Supabase catalog. Prices shown in{" "}
-            <span className="text-zinc-300">euros (€)</span> as stored — AliExpress imports include
-            margin and German VAT in the listed amount.
+            Every product in your Supabase <code className="text-zinc-500">products</code> table
+            (loaded in full, paginated on the server). Prices in{" "}
+            <span className="text-zinc-300">euros (€)</span> — AliExpress imports include margin and
+            German VAT.
+          </p>
+          <p className="mt-2 text-xs font-medium text-zinc-500">
+            {products.length} {products.length === 1 ? "product" : "products"}
           </p>
         </div>
 
@@ -64,23 +66,14 @@ export default async function CatalogPage() {
               <li key={p.id} className="group flex flex-col">
                 <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-800/90 bg-gradient-to-b from-zinc-900/80 to-zinc-950/90 shadow-lg shadow-black/20 ring-1 ring-white/[0.03] transition duration-300 hover:border-zinc-700 hover:ring-amber-500/10">
                   <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900">
-                    {p.image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={p.image_url}
-                        alt={p.name}
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div
-                        className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[radial-gradient(ellipse_at_30%_20%,_var(--tw-gradient-stops))] from-amber-900/20 via-zinc-900 to-zinc-950 px-4 text-center"
-                        aria-hidden
-                      >
-                        <span className="text-xs font-medium text-zinc-600">No image</span>
-                      </div>
-                    )}
+                    {/* eslint-disable-next-line @next/next/no-img-element -- local placeholder + remote CDN */}
+                    <img
+                      src={p.image_url?.trim() ? p.image_url.trim() : PLACEHOLDER_IMAGE}
+                      alt={p.name}
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent opacity-80" />
                     {p.external_source === "aliexpress" ? (
                       <span className="absolute left-3 top-3 rounded-lg bg-black/60 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-amber-200/95 backdrop-blur-md">

@@ -32,6 +32,7 @@ export function ProductLanding({
 }) {
   const videoSrc = product.video_url?.trim() || null;
   const imageSrc = product.image_url?.trim() || null;
+  const heroImageSrc = imageSrc || "/og-placeholder.svg";
 
   return (
     <div className="pb-24">
@@ -62,19 +63,14 @@ export function ProductLanding({
           >
             <source src={videoSrc} />
           </video>
-        ) : imageSrc ? (
-          // eslint-disable-next-line @next/next/no-img-element -- remote supplier CDN URLs
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element -- placeholder or supplier CDN
           <img
-            src={imageSrc}
+            src={heroImageSrc}
             alt={product.name}
             className="absolute inset-0 h-full w-full object-cover"
             loading="eager"
             decoding="async"
-          />
-        ) : (
-          <div
-            className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-900/40 via-zinc-950 to-black"
-            aria-hidden
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-transparent" />
