@@ -23,8 +23,15 @@ function FeatureCard({
   );
 }
 
-export function ProductLanding({ product }: { product: Product }) {
+export function ProductLanding({
+  product,
+  checkout,
+}: {
+  product: Product;
+  checkout?: "success" | "canceled" | null;
+}) {
   const videoSrc = product.video_url?.trim() || null;
+  const imageSrc = product.image_url?.trim() || null;
 
   return (
     <div className="pb-24">
@@ -55,6 +62,15 @@ export function ProductLanding({ product }: { product: Product }) {
           >
             <source src={videoSrc} />
           </video>
+        ) : imageSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element -- remote supplier CDN URLs
+          <img
+            src={imageSrc}
+            alt={product.name}
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
         ) : (
           <div
             className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-900/40 via-zinc-950 to-black"
@@ -65,7 +81,7 @@ export function ProductLanding({ product }: { product: Product }) {
         <div className="relative mx-auto flex min-h-[56vh] max-w-6xl flex-col justify-end px-4 pb-16 pt-28 sm:min-h-[62vh] sm:px-6 sm:pb-20">
           <div className="max-w-2xl">
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-amber-400/90">
-              Garage series
+              {product.external_source === "aliexpress" ? "Partner catalog" : "Garage series"}
             </p>
             <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
               {product.name}
@@ -130,6 +146,7 @@ export function ProductLanding({ product }: { product: Product }) {
             productId={product.id}
             productName={product.name}
             salePrice={product.sale_price}
+            checkout={checkout ?? null}
           />
         </div>
       </section>

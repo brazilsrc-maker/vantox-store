@@ -5,7 +5,10 @@ import type { Product } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ id: string }> };
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ checkout?: string }>;
+};
 
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
@@ -25,8 +28,9 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function ProductPage({ params }: Props) {
+export default async function ProductPage({ params, searchParams }: Props) {
   const { id } = await params;
+  const { checkout } = await searchParams;
   const supabase = createSupabaseServerClient();
 
   if (!supabase) {
@@ -62,7 +66,13 @@ export default async function ProductPage({ params }: Props) {
     supplier_url: data.supplier_url,
     description: data.description,
     video_url: data.video_url,
+    image_url: data.image_url ?? null,
+    external_source: data.external_source ?? null,
+    external_item_id: data.external_item_id ?? null,
   };
 
-  return <ProductLanding product={product} />;
+  const checkoutState =
+    checkout === "success" ? "success" : checkout === "canceled" ? "canceled" : null;
+
+  return <ProductLanding product={product} checkout={checkoutState} />;
 }
