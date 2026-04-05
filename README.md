@@ -22,16 +22,22 @@ Optional: set `video_url` on the product row to a **public** MP4 URL or Supabase
 
 ## Deploy on Vercel
 
-1. Push this folder to a GitHub repository (e.g. `brazilsrc-maker/vantox-store`).
+**Use the same Vercel team where you bought `vantox.store`.** If you deploy from a different login (e.g. local CLI), the domain will not attach until the project lives under that team. Recommended: connect **GitHub** → **Import** → enable auto-deploys.
+
+1. Push this folder to a GitHub repository (e.g. under `brazilsrc-maker`).
 2. In Vercel: **Add New Project** → import the repo → Framework Preset: Next.js.
-3. **Environment Variables** (Production + Preview):
+3. **Environment Variables** (at least **Production**; add **Preview** when you use branches):
 
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-4. Deploy, then **Settings → Domains** → add `vantox.store` (already purchased on Vercel).
+4. Deploy, then **Settings → Domains** → add `vantox.store`.
 
 Redeploy after changing env vars.
+
+### CLI deploy (optional)
+
+If you use `vercel deploy --prod`, pass `--scope <your-team-slug>` so the project appears under the intended team dashboard.
 
 ## Scripts
 
