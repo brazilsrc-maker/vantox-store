@@ -1,0 +1,68 @@
+import type { Palette } from "./types";
+
+export const PALETTES: Palette[] = [
+  {
+    id: "neon-void",
+    label: "نيون",
+    background: "linear-gradient(160deg, #12051f 0%, #2a0850 45%, #ff2d95 160%)",
+    text: "#ffffff",
+    accent: "#ff2d95",
+    stickerBg: "rgba(255,45,149,0.22)",
+  },
+  {
+    id: "electric-purple",
+    label: "بنفسجي",
+    background: "linear-gradient(165deg, #0b0618 0%, #4c1d95 55%, #a78bfa 140%)",
+    text: "#f5f3ff",
+    accent: "#c084fc",
+    stickerBg: "rgba(192,132,252,0.25)",
+  },
+  {
+    id: "midnight-cyan",
+    label: "سماوي",
+    background: "linear-gradient(160deg, #020617 0%, #0e7490 60%, #22d3ee 150%)",
+    text: "#ecfeff",
+    accent: "#22d3ee",
+    stickerBg: "rgba(34,211,238,0.22)",
+  },
+  {
+    id: "ember",
+    label: "جمر",
+    background: "linear-gradient(160deg, #1a0505 0%, #7f1d1d 50%, #fb7185 140%)",
+    text: "#fff1f2",
+    accent: "#fb7185",
+    stickerBg: "rgba(251,113,133,0.25)",
+  },
+  {
+    id: "lime-night",
+    label: "لايم",
+    background: "linear-gradient(160deg, #052e16 0%, #14532d 50%, #a3e635 140%)",
+    text: "#f7fee7",
+    accent: "#a3e635",
+    stickerBg: "rgba(163,230,53,0.22)",
+  },
+  {
+    id: "solid-black",
+    label: "أسود",
+    background: "#050505",
+    text: "#ffffff",
+    accent: "#ff2d95",
+    stickerBg: "rgba(255,255,255,0.12)",
+  },
+  {
+    id: "solid-slate",
+    label: "سليت",
+    background: "#0f172a",
+    text: "#f8fafc",
+    accent: "#38bdf8",
+    stickerBg: "rgba(56,189,248,0.18)",
+  },
+  {
+    id: "hot-pink",
+    label: "بينك",
+    background: "linear-gradient(145deg, #4a044e 0%, #db2777 70%, #f472b6 130%)",
+    text: "#ffffff",
+    accent: "#fce7f3",
+    stickerBg: "rgba(255,255,255,0.18)",
+  },
+];

@@ -1,13 +1,41 @@
-export type Product = {
+export type NicheId =
+  | "gaming"
+  | "tech"
+  | "lifestyle"
+  | "fashion"
+  | "memes"
+  | "ecommerce"
+  | "fitness"
+  | "food"
+  | "personal";
+
+export type StoryTypeId =
+  | "this_or_that"
+  | "sequence"
+  | "qa"
+  | "controversial";
+
+export type StickerKind = "poll" | "quiz" | "question" | "none";
+
+export type StoryIdea = {
   id: string;
-  slug: string | null;
-  name: string;
-  supplier_price: number | null;
-  sale_price: number;
-  supplier_url: string | null;
-  description: string | null;
-  video_url: string | null;
-  image_url: string | null;
-  external_source: string | null;
-  external_item_id: string | null;
+  niche: NicheId;
+  type: StoryTypeId;
+  headline: string;
+  subtext?: string;
+  optionA?: string;
+  optionB?: string;
+  sticker: StickerKind;
+  /** For 3-step sequences */
+  steps?: [string, string, string];
+  trend?: boolean;
+};
+
+export type Palette = {
+  id: string;
+  label: string;
+  background: string;
+  text: string;
+  accent: string;
+  stickerBg: string;
 };

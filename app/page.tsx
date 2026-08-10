@@ -1,58 +1,23 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { DEMO_PRODUCT_ID } from "@/lib/constants";
+import { StoryWorkspace } from "@/components/story-workspace";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
-      <header className="border-b border-zinc-800/80">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <span className="text-sm font-semibold tracking-[0.25em]">VANTOX</span>
-          <nav className="flex items-center gap-6">
-            <Link
-              href="/catalog"
-              className="text-xs font-semibold uppercase tracking-wider text-amber-400 transition hover:text-amber-300"
-            >
-              Catalog
-            </Link>
-            <span className="text-xs text-zinc-500">vantox.store</span>
-          </nav>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-        <p className="text-xs font-medium uppercase tracking-[0.3em] text-amber-500/90">
-          E-commerce middleware
-        </p>
-        <h1 className="mt-4 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Curated gear for people who live in the driver&apos;s seat.
+    <main className="animate-rise">
+      <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-10">
+        <h1 className="max-w-2xl text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl">
+          <span className="bg-gradient-to-l from-fuchsia-400 via-pink-400 to-cyan-300 bg-clip-text text-transparent">
+            VANTOX
+          </span>
+          <span className="mt-1 block text-white">
+            مولّد سيناريوهات الستوري الشديدة التفاعل
+          </span>
         </h1>
-        <p className="mt-6 max-w-xl text-lg text-zinc-400">
-          Vantox is a focused storefront: fast checkout, orders in your database, and a full product
-          grid on <span className="text-zinc-300">/catalog</span> (import from AliExpress or seed in
-          Supabase).
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
+          ادخل كل صباح، اختر مجالك، واحصل على فكرة ستوري جاهزة مع معاينة حية
+          9:16 — انسخ النص أو حمّل الصورة وانشر فوراً.
         </p>
-        <div className="mt-12 flex flex-wrap gap-4">
-          <Link
-            href="/catalog"
-            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 px-8 py-4 text-sm font-semibold text-zinc-950 shadow-lg shadow-amber-500/20 transition hover:from-amber-400 hover:to-orange-500"
-          >
-            View all products
-            <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
-          </Link>
-          <Link
-            href={`/product/${DEMO_PRODUCT_ID}`}
-            className="inline-flex items-center gap-2 rounded-full border border-zinc-700 px-8 py-4 text-sm font-semibold text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-900/50"
-          >
-            Featured LED key holder
-            <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
-          </Link>
-        </div>
-      </main>
-
-      <footer className="border-t border-zinc-800/80 py-8 text-center text-xs text-zinc-600">
-        © {new Date().getFullYear()} Vantox
-      </footer>
-    </div>
+      </section>
+      <StoryWorkspace />
+    </main>
   );
 }
