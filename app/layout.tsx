@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   description:
     "المساعد اليومي لصنّاع المحتوى: أفكار ستوري تفاعلية، تصويتات، سلاسل تشويق، وأسئلة ترفع التفاعل على إنستغرام وتيك توك.",
   metadataBase: new URL("https://vantox.store"),
+  verification: {
+    google: "b6hqj1GlS5r01dmaQ5-4GwTCHAnpRDx9602L6Tk2woM",
+  },
   openGraph: {
     siteName: "VANTOX",
     title: "VANTOX — مولّد سيناريوهات الستوري",
