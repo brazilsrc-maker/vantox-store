@@ -127,32 +127,7 @@ export function StoryCanvas({
         ) : null}
         {backgroundImage ? <div className="absolute inset-0 bg-black/45" /> : null}
 
-        <div className="absolute inset-x-0 top-0 z-10 px-3 pt-3">
-          <div className="mb-2 flex gap-1">
-            {(isSequence ? [0, 1, 2] : [0]).map((i) => (
-              <div key={i} className="h-[3px] flex-1 rounded-full bg-white/30">
-                <div
-                  className="h-full rounded-full bg-white transition-all"
-                  style={{
-                    width: isSequence
-                      ? i < sequenceStep
-                        ? "100%"
-                        : i === sequenceStep
-                          ? "55%"
-                          : "0%"
-                      : "70%",
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-between px-1 text-[11px] font-semibold text-white/90">
-            <span>9:41</span>
-            <span className="opacity-80">vantox</span>
-          </div>
-        </div>
-
-        <div className="relative z-[1] flex h-full flex-col items-center justify-center gap-6 px-5 pb-10 pt-16 text-center">
+        <div className="relative z-[1] flex h-full flex-col items-center justify-center gap-6 px-5 py-12 text-center">
           {isSequence ? (
             <div
               className="rounded-full px-3 py-1 text-[11px] font-bold tracking-wide"
@@ -196,12 +171,6 @@ export function StoryCanvas({
             stickerBg={palette.stickerBg}
             askMe={t.askMe}
           />
-        </div>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center">
-          <div className="rounded-full bg-black/40 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-white/50">
-            VANTOX
-          </div>
         </div>
       </div>
     </div>
