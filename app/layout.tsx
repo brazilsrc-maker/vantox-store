@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo, Space_Grotesk } from "next/font/google";
+import Script from "next/script";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
@@ -25,6 +26,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://vantox.store"),
   verification: {
     google: "b6hqj1GlS5r01dmaQ5-4GwTCHAnpRDx9602L6Tk2woM",
+  },
+  other: {
+    "google-adsense-account": "ca-pub-9998186124580672",
   },
   openGraph: {
     siteName: "VANTOX",
@@ -55,6 +59,12 @@ export default function RootLayout({
       className={`${body.variable} ${display.variable} h-full antialiased`}
     >
       <body className="min-h-full text-slate-50">
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9998186124580672"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <SiteHeader />
         {children}
       </body>
