@@ -1,3 +1,5 @@
+import type { Locale } from "./i18n";
+
 export type NicheId =
   | "gaming"
   | "tech"
@@ -17,6 +19,8 @@ export type StoryTypeId =
 
 export type StickerKind = "poll" | "quiz" | "question" | "none";
 
+export type LocText = Partial<Record<Locale, string>> & { ar: string };
+
 export type StoryIdea = {
   id: string;
   niche: NicheId;
@@ -26,8 +30,20 @@ export type StoryIdea = {
   optionA?: string;
   optionB?: string;
   sticker: StickerKind;
-  /** For 3-step sequences */
   steps?: [string, string, string];
+  trend?: boolean;
+};
+
+export type RawStoryIdea = {
+  id: string;
+  niche: NicheId;
+  type: StoryTypeId;
+  headline: LocText;
+  subtext?: LocText;
+  optionA?: LocText;
+  optionB?: LocText;
+  sticker: StickerKind;
+  steps?: [LocText, LocText, LocText];
   trend?: boolean;
 };
 
@@ -39,3 +55,8 @@ export type Palette = {
   accent: string;
   stickerBg: string;
 };
+
+export function loc(text: LocText | undefined, locale: Locale): string {
+  if (!text) return "";
+  return text[locale] || text.en || text.ar;
+}

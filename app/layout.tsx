@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
+import { LocaleProvider } from "@/components/locale-provider";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
@@ -23,12 +24,16 @@ export const metadata: Metadata = {
   },
   description:
     "المساعد اليومي لصنّاع المحتوى: أفكار ستوري تفاعلية، تصويتات، سلاسل تشويق، وأسئلة ترفع التفاعل على إنستغرام وتيك توك.",
-  metadataBase: new URL("https://vantox.store"),
+  metadataBase: new URL("https://www.vantox.store"),
   verification: {
     google: "b6hqj1GlS5r01dmaQ5-4GwTCHAnpRDx9602L6Tk2woM",
   },
   other: {
     "google-adsense-account": "ca-pub-9998186124580672",
+  },
+  icons: {
+    icon: "/vantox-icon.png",
+    apple: "/vantox-icon.png",
   },
   openGraph: {
     siteName: "VANTOX",
@@ -41,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05010d",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -58,15 +63,17 @@ export default function RootLayout({
       dir="rtl"
       className={`${body.variable} ${display.variable} h-full antialiased`}
     >
-      <body className="min-h-full text-slate-50">
+      <body className="min-h-full text-slate-900">
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9998186124580672"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-        <SiteHeader />
-        {children}
+        <LocaleProvider>
+          <SiteHeader />
+          {children}
+        </LocaleProvider>
       </body>
     </html>
   );

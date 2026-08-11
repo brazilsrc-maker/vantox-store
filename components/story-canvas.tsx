@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale } from "@/components/locale-provider";
 import type { Palette, StoryIdea, StickerKind } from "@/lib/types";
 
 type Props = {
@@ -8,6 +9,10 @@ type Props = {
   backgroundImage: string | null;
   sequenceStep: number;
   canvasRef: React.RefObject<HTMLDivElement | null>;
+  headlineOverride?: string;
+  optionAOverride?: string;
+  optionBOverride?: string;
+  subtextOverride?: string;
 };
 
 function Sticker({
@@ -16,12 +21,14 @@ function Sticker({
   optionB,
   accent,
   stickerBg,
+  askMe,
 }: {
   kind: StickerKind;
   optionA?: string;
   optionB?: string;
   accent: string;
   stickerBg: string;
+  askMe: string;
 }) {
   if (kind === "none") return null;
 
@@ -39,13 +46,13 @@ function Sticker({
             className="rounded-xl px-3 py-2.5 text-center text-sm font-bold text-white"
             style={{ background: "rgba(255,255,255,0.18)" }}
           >
-            {optionA ?? "الخيار أ"}
+            {optionA ?? "A"}
           </div>
           <div
             className="rounded-xl px-3 py-2.5 text-center text-sm font-bold"
             style={{ background: accent, color: "#0a0a0a" }}
           >
-            {optionB ?? "الخيار ب"}
+            {optionB ?? "B"}
           </div>
         </div>
       </div>
@@ -60,7 +67,7 @@ function Sticker({
       <div className="mb-1 text-[10px] font-bold tracking-wider text-white/70">
         QUESTIONS
       </div>
-      <div className="text-sm font-semibold text-white">اسألني أي شيء…</div>
+      <div className="text-sm font-semibold text-white">{askMe}</div>
     </div>
   );
 }
@@ -71,17 +78,26 @@ export function StoryCanvas({
   backgroundImage,
   sequenceStep,
   canvasRef,
+  headlineOverride,
+  optionAOverride,
+  optionBOverride,
+  subtextOverride,
 }: Props) {
+  const { t } = useLocale();
   const isSequence = idea.type === "sequence" && idea.steps;
-  const headline = isSequence
-    ? idea.steps![sequenceStep] ?? idea.steps![0]
-    : idea.headline;
+  const headline =
+    headlineOverride ??
+    (isSequence ? idea.steps![sequenceStep] ?? idea.steps![0] : idea.headline);
+
+  const optionA = optionAOverride || idea.optionA;
+  const optionB = optionBOverride || idea.optionB;
+  const subtext = subtextOverride ?? idea.subtext;
 
   const showPollOptions =
     !isSequence &&
     (idea.sticker === "poll" || idea.sticker === "quiz") &&
-    idea.optionA &&
-    idea.optionB;
+    optionA &&
+    optionB;
 
   const stickerKind: StickerKind = isSequence
     ? sequenceStep === 2
@@ -93,12 +109,10 @@ export function StoryCanvas({
     <div className="relative mx-auto w-full max-w-[320px]">
       <div
         ref={canvasRef}
-        className="relative overflow-hidden rounded-[28px] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_25px_80px_rgba(255,45,149,0.18)]"
+        className="relative overflow-hidden rounded-[28px] shadow-[0_0_0_1px_rgba(15,23,42,0.08),0_25px_80px_rgba(219,39,119,0.12)]"
         style={{
           aspectRatio: "9 / 16",
-          background: backgroundImage
-            ? undefined
-            : palette.background,
+          background: backgroundImage ? undefined : palette.background,
           color: palette.text,
         }}
       >
@@ -108,20 +122,15 @@ export function StoryCanvas({
             src={backgroundImage}
             alt=""
             className="absolute inset-0 h-full w-full object-cover"
+            crossOrigin="anonymous"
           />
         ) : null}
-        {backgroundImage ? (
-          <div className="absolute inset-0 bg-black/45" />
-        ) : null}
+        {backgroundImage ? <div className="absolute inset-0 bg-black/45" /> : null}
 
-        {/* Fake status / story bars */}
         <div className="absolute inset-x-0 top-0 z-10 px-3 pt-3">
           <div className="mb-2 flex gap-1">
             {(isSequence ? [0, 1, 2] : [0]).map((i) => (
-              <div
-                key={i}
-                className="h-[3px] flex-1 rounded-full bg-white/30"
-              >
+              <div key={i} className="h-[3px] flex-1 rounded-full bg-white/30">
                 <div
                   className="h-full rounded-full bg-white transition-all"
                   style={{
@@ -152,7 +161,7 @@ export function StoryCanvas({
                 color: palette.accent,
               }}
             >
-              ستوري {sequenceStep + 1} من 3
+              {t.storyOf.replace("{n}", String(sequenceStep + 1))}
             </div>
           ) : null}
 
@@ -163,16 +172,29 @@ export function StoryCanvas({
             {headline}
           </p>
 
-          {!isSequence && idea.subtext ? (
-            <p className="text-sm font-medium text-white/80">{idea.subtext}</p>
+          {!isSequence && subtext ? (
+            <p className="text-sm font-medium text-white/80">{subtext}</p>
           ) : null}
 
           <Sticker
             kind={stickerKind}
-            optionA={showPollOptions ? idea.optionA : sequenceStep === 2 ? "الخيار أ" : undefined}
-            optionB={showPollOptions ? idea.optionB : sequenceStep === 2 ? "الخيار ب" : undefined}
+            optionA={
+              showPollOptions
+                ? optionA
+                : sequenceStep === 2
+                  ? optionA || t.optionA
+                  : undefined
+            }
+            optionB={
+              showPollOptions
+                ? optionB
+                : sequenceStep === 2
+                  ? optionB || t.optionB
+                  : undefined
+            }
             accent={palette.accent}
             stickerBg={palette.stickerBg}
+            askMe={t.askMe}
           />
         </div>
 
