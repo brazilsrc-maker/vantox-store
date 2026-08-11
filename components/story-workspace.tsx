@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 import {
   Check,
@@ -19,7 +18,17 @@ import { AdSlot } from "@/components/ad-slot";
 import { useLocale } from "@/components/locale-provider";
 import { StoryCanvas } from "@/components/story-canvas";
 import { StreakBadge } from "@/components/streak-badge";
-import { ideaToCopyText, getTrendIdeas, pickRandom } from "@/lib/ideas";
+import {
+  getDailyTrends,
+  getTrendDayLabel,
+} from "@/lib/daily-trends";
+import {
+  downloadDataUrl,
+  EXPORT_HEIGHT,
+  EXPORT_WIDTH,
+  renderStoryToDataUrl,
+} from "@/lib/export-story";
+import { ideaToCopyText, pickRandom } from "@/lib/ideas";
 import { NICHES, STORY_TYPE_IDS } from "@/lib/niches";
 import { bumpStreak, readStreak } from "@/lib/streak";
 import { PALETTES } from "@/lib/themes";
@@ -161,29 +170,26 @@ export function StoryWorkspace() {
     window.setTimeout(() => setCopied(false), 1800);
   };
 
-  const captureCanvas = async () => {
-    if (!canvasRef.current) throw new Error("no canvas");
-    return toPng(canvasRef.current, {
-      pixelRatio: 2,
-      cacheBust: true,
-      includeQueryParams: true,
-      skipFonts: true,
-      style: {
-        transform: "none",
-      },
+  const captureStory = async () =>
+    renderStoryToDataUrl({
+      idea: displayIdea,
+      palette,
+      sequenceStep,
+      headline: edits.headline || displayIdea.headline,
+      optionA: edits.optionA || displayIdea.optionA,
+      optionB: edits.optionB || displayIdea.optionB,
+      subtext: edits.subtext || displayIdea.subtext,
+      backgroundImage: bgImage,
+      storyOfLabel: t.storyOf,
+      askMe: t.askMe,
     });
-  };
 
   const downloadPng = async () => {
     if (downloading) return;
     setDownloading("png");
-    await new Promise((r) => setTimeout(r, 400));
     try {
-      const dataUrl = await captureCanvas();
-      const a = document.createElement("a");
-      a.href = dataUrl;
-      a.download = `vantox-story-${Date.now()}.png`;
-      a.click();
+      const dataUrl = await captureStory();
+      downloadDataUrl(dataUrl, `vantox-story-${Date.now()}.png`);
       const s = bumpStreak();
       setStreak(s.count);
     } catch (err) {
@@ -197,18 +203,15 @@ export function StoryWorkspace() {
   const downloadPdf = async () => {
     if (downloading) return;
     setDownloading("pdf");
-    await new Promise((r) => setTimeout(r, 400));
     try {
-      const dataUrl = await captureCanvas();
-      const width = 1080;
-      const height = 1920;
+      const dataUrl = await captureStory();
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "px",
-        format: [width, height],
+        format: [EXPORT_WIDTH, EXPORT_HEIGHT],
         hotfixes: ["px_scaling"],
       });
-      pdf.addImage(dataUrl, "PNG", 0, 0, width, height);
+      pdf.addImage(dataUrl, "PNG", 0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
       pdf.save(`vantox-story-${Date.now()}.pdf`);
       const s = bumpStreak();
       setStreak(s.count);
@@ -220,7 +223,8 @@ export function StoryWorkspace() {
     }
   };
 
-  const trends = getTrendIdeas(niche, locale);
+  const trends = getDailyTrends(locale, niche, 8);
+  const trendDate = getTrendDayLabel(locale);
   const showOptions =
     storyType === "this_or_that" ||
     (storyType === "sequence" && sequenceStep === 2);
@@ -474,11 +478,15 @@ export function StoryWorkspace() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 pb-28 pt-6 sm:px-6">
       <section className="mb-6 overflow-hidden rounded-2xl border border-fuchsia-200/80 bg-gradient-to-l from-fuchsia-50 via-white to-cyan-50 p-4">
-        <div className="mb-3 flex items-center gap-2 text-sm font-bold text-fuchsia-700">
+        <div className="mb-1 flex flex-wrap items-center gap-2 text-sm font-bold text-fuchsia-700">
           <TrendingUp className="h-4 w-4" />
           {t.todayTrend}
           <Sparkles className="h-3.5 w-3.5 text-cyan-600" />
+          <span className="text-xs font-semibold text-fuchsia-500/80">
+            {trendDate}
+          </span>
         </div>
+        <p className="mb-3 text-[11px] text-slate-500">{t.todayTrendHint}</p>
         <div className="flex gap-2 overflow-x-auto pb-1">
           {trends.map((trendItem) => (
             <button

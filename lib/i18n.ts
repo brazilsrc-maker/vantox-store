@@ -26,6 +26,7 @@ export type Dictionary = {
   preparing: string;
   previewHint: string;
   todayTrend: string;
+  todayTrendHint: string;
   edit: string;
   preview: string;
   day: string;
@@ -69,6 +70,7 @@ export const DICTS: Record<Locale, Dictionary> = {
     preparing: "جاري التجهيز…",
     previewHint: "المعاينة بنسبة 9:16 — جاهزة لإنستغرام وتيك توك",
     todayTrend: "تريند اليوم",
+    todayTrendHint: "يتجدد تلقائياً كل يوم",
     edit: "تعديل",
     preview: "معاينة",
     day: "يوم",
@@ -138,6 +140,7 @@ export const DICTS: Record<Locale, Dictionary> = {
     preparing: "Preparing…",
     previewHint: "9:16 preview — ready for Instagram & TikTok",
     todayTrend: "Today's trend",
+    todayTrendHint: "Refreshes automatically every day",
     edit: "Edit",
     preview: "Preview",
     day: "day",
@@ -207,6 +210,7 @@ export const DICTS: Record<Locale, Dictionary> = {
     preparing: "Préparation…",
     previewHint: "Aperçu 9:16 — prêt pour Instagram & TikTok",
     todayTrend: "Tendance du jour",
+    todayTrendHint: "Se renouvelle automatiquement chaque jour",
     edit: "Modifier",
     preview: "Aperçu",
     day: "jour",
